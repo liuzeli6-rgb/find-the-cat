@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>找猫猫</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#e8e0d6;display:grid;place-items:center;font-family:"PingFang SC","Microsoft YaHei",sans-serif;-webkit-user-select:none;user-select:none}
+.wrap{position:relative;width:min(94vw,400px);aspect-ratio:1/1;background:#ede4d8;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(60,40,20,.15),inset 0 0 0 1px rgba(255,255,255,.4)}
+.wall{position:absolute;inset:0;background:linear-gradient(175deg,#f7f0e7,#efe5d8 50%,#e6dac9)}
+.floor{position:absolute;bottom:0;left:0;right:0;height:38%;background:linear-gradient(0deg,#d6c8b4,#e0d2c0 50%,#e8dcc8)}
+.skirting{position:absolute;bottom:38%;left:0;right:0;height:5px;background:#c8b8a2}
+.picture{position:absolute;top:7%;left:50%;transform:translateX(-50%);width:20%;aspect-ratio:3/2;background:linear-gradient(135deg,#d4d0c8,#c8c0b4);border-radius:4px;border:5px solid #d8ccbc;display:grid;place-items:center;font-size:16px}
+.picture::after{content:"🌿"}
+.lamp{position:absolute;top:4%;right:12%;width:3px;height:24px;background:#b8a890;border-radius:2px}
+.lamp::after{content:"";position:absolute;top:-5px;left:-4px;width:11px;height:11px;background:linear-gradient(135deg,#f0e8c0,#e8d8a0);border-radius:50%;box-shadow:0 0 20px rgba(240,220,140,.15)}
+.sofa{position:absolute;bottom:15%;left:5%;width:44%;height:28%;background:linear-gradient(175deg,#c8b8a2,#baa890);border-radius:18px 18px 10px 10px}
+.sofa-b{position:absolute;top:-18%;left:0;width:100%;height:30%;background:linear-gradient(175deg,#d4c4b0,#c8b8a2);border-radius:14px 14px 4px 4px}
+.sofa-s{position:absolute;top:22%;left:6%;width:88%;height:28%;background:#baa890;border-radius:8px}
+.sofa-c{position:absolute;top:18%;left:10%;width:80%;height:18%;display:flex;gap:6%;justify-content:center}
+.sofa-c i{display:block;width:26%;height:100%;background:linear-gradient(175deg,#d8ccbc,#ccbeac);border-radius:8px}
+.sofa-l{position:absolute;bottom:-6%;width:7%;height:8%;background:#a0907a;border-radius:0 0 3px 3px}
+.sofa-l.l{left:14%}.sofa-l.r{right:14%}
+.table{position:absolute;bottom:25%;right:6%;width:32%;aspect-ratio:1/0.55;background:linear-gradient(175deg,#d0c0a8,#c4b49c);border-radius:6px}
+.t-leg{position:absolute;width:7%;height:16%;background:#a0907a;border-radius:2px}
+.t-leg.l{bottom:-14%;left:14%}.t-leg.r{bottom:-14%;right:14%}
+.mug{position:absolute;top:12%;right:20%;width:14%;aspect-ratio:1/1.1;background:linear-gradient(175deg,#e8e0d0,#dcd0c0);border-radius:50% 50% 4px 4px}
+.curtain-wrap{position:absolute;top:0;right:0;width:34%;height:70%;overflow:hidden}
+.curtain{position:absolute;top:0;right:0;width:100%;height:100%;background:linear-gradient(90deg,#e0d4c0,#d8cabc 30%,#c8bca8 70%,#d8cabc);border-radius:0 0 0 20px;opacity:.85}
+.c-fold{position:absolute;top:0;height:100%;width:16%;background:linear-gradient(90deg,transparent,rgba(0,0,0,.02),transparent)}
+.c-fold:nth-child(1){left:12%}.c-fold:nth-child(2){left:40%}.c-fold:nth-child(3){left:68%}
+.c-rod{position:absolute;top:-2px;right:0;width:36%;height:4px;background:linear-gradient(90deg,#b8a890,#c8bca8);border-radius:4px;z-index:2}
+.c-ring{position:absolute;top:-4px;width:7px;height:7px;border-radius:50%;border:2px solid #c8bca8;z-index:3}
+.c-ring:nth-child(1){right:6%}.c-ring:nth-child(2){right:20%}.c-ring:nth-child(3){right:34%}
+.shelf{position:absolute;top:9%;left:4%;width:17%;height:46%;background:linear-gradient(175deg,#c8b8a2,#baa890);border-radius:4px}
+.sh-in{position:absolute;left:8%;right:8%;height:2px;background:#d4c4b0;border-radius:2px}
+.sh-in:nth-child(1){top:28%}.sh-in:nth-child(2){top:52%}.sh-in:nth-child(3){top:76%}
+.sh-bk{position:absolute;width:18%;height:18%;border-radius:2px}
+.plant{position:absolute;bottom:16%;right:2%;width:15%;aspect-ratio:1/1.3;z-index:5}
+.p-pot{position:absolute;bottom:0;left:5%;width:90%;height:48%;background:linear-gradient(175deg,#d4a078,#c89068);border-radius:0 0 6px 6px}
+.p-pot::after{content:"";position:absolute;top:-3px;left:8%;width:84%;height:5px;background:#dcac84;border-radius:2px}
+.p-lvs{position:absolute;bottom:38%;left:-8%;width:116%;height:55%;background:radial-gradient(ellipse at 50% 100%,#8aaa7a,transparent);opacity:.3;border-radius:50%}
+
+/* 点击区 */
+.spot{position:absolute;z-index:8;cursor:pointer;border-radius:12px}
+.spot:active{transform:scale(.96)}
+.s1{width:26%;height:14%;bottom:18%;left:14%}
+.s2{width:20%;height:34%;top:16%;right:4%}
+.s3{width:11%;height:16%;top:14%;left:7%}
+.s4{width:13%;height:22%;bottom:14%;right:0;z-index:9}
+
+/* 猫 */
+.cat-area{position:absolute;z-index:10;display:none;pointer-events:none}
+.cat-area.show{display:block}
+
+.cat{position:relative;width:70px;height:60px}
+.c-body{position:absolute;bottom:0;left:15%;width:48px;height:38px;background:linear-gradient(175deg,#f5efe8,#e8ddd0);border-radius:50% 50% 40% 40%;opacity:0;transition:opacity .5s}
+.c-body.in{opacity:1}
+
+.c-head{position:absolute;bottom:22px;left:18px;width:34px;height:30px;background:linear-gradient(175deg,#f5efe8,#e8ddd0);border-radius:50%;opacity:0;transition:opacity .3s;z-index:2}
+.c-head.in{opacity:1}
+
+.c-ear{position:absolute;width:0;height:0;border-style:solid;border-width:0 7px 12px 7px;border-color:transparent transparent #d4b8a0 transparent;opacity:0;transition:opacity .3s}
+.c-ear.in{opacity:1}
+.c-el{top:-6px;left:4px}
+.c-er{top:-6px;right:4px}
+
+.c-eye{position:absolute;width:7px;height:8px;background:linear-gradient(175deg,#7ab8d8,#5a98c0);border-radius:50%;opacity:0;transition:opacity .3s;z-index:5}
+.c-eye.in{opacity:1}
+.c-ey{left:7px;top:7px}.c-ey2{right:7px;top:7px}
+.c-pupil{position:absolute;width:3px;height:4px;background:#2a3a4a;border-radius:50%;top:2px;left:2px}
+
+.c-nose{position:absolute;width:3px;height:2.5px;background:#e8b0a8;border-radius:50%;top:16px;left:15.5px;opacity:0;transition:opacity .3s;z-index:5}
+.c-nose.in{opacity:1}
+
+.c-tail{position:absolute;bottom:-6px;left:-12px;width:24px;height:6px;background:#e8ddd0;border-radius:3px;opacity:0;transition:opacity .5s}
+.c-tail.in{opacity:1}
+
+/* 各位置偏移 */
+.cat-curtain .c-head{background:#f0e8e0}
+.cat-curtain .c-body{display:none}
+.cat-shelf{transform:scale(.8);transform-origin:left top}
+.cat-shelf .c-head{background:#f0e8e0;width:30px;height:26px}
+.cat-shelf .c-body{display:none}
+.cat-plant{transform:scale(.75);transform-origin:left bottom}
+.cat-plant .c-head{background:#f0e8e0}
+.cat-plant .c-body{display:none}
+
+/* 提示 */
+.hint{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);padding:6px 16px;border-radius:20px;font-size:11px;color:#8a7a6a;z-index:15;white-space:nowrap;transition:opacity .5s;pointer-events:none}
+.hint.h{opacity:0}
+
+/* 找到 */
+.found{position:absolute;inset:0;z-index:30;display:none;place-items:center;background:rgba(232,224,212,.88);backdrop-filter:blur(8px)}
+.found.show{display:grid;animation:fi .5s}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.f-box{text-align:center;padding:10px 20px}
+.f-box .big{font-size:52px;margin-bottom:8px;animation:bo .6s}
+@keyframes bo{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(-6px)}}
+.f-box h2{font-size:20px;color:#5a4a3a;font-weight:700}
+.f-box .msg{font-size:12px;color:#9a8a7a;line-height:1.6;margin:6px 0 14px}
+.f-box button{background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.08);color:#5a4a3a;padding:8px 22px;border-radius:12px;font-size:13px;cursor:pointer;transition:.2s}
+.f-box button:active{background:#fff}
+
+/* 爱心 */
+.hearts{position:absolute;inset:0;z-index:35;pointer-events:none;display:none}
+.hearts.on{display:block}
+.hrt{position:absolute;animation:up 2.5s ease forwards;font-size:16px}
+@keyframes up{0%{opacity:1;transform:translateY(0) scale(.8)}100%{opacity:0;transform:translateY(-200px) scale(1.2)}}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="wrap">
+  <div class="wall"></div>
+  <div class="floor"></div>
+  <div class="skirting"></div>
+  <div class="picture"></div>
+  <div class="lamp"></div>
+  <div class="sofa"><div class="sofa-b"></div><div class="sofa-s"></div><div class="sofa-c"><i></i><i></i><i></i></div><div class="sofa-l l"></div><div class="sofa-l r"></div></div>
+  <div class="table"><div class="t-leg l"></div><div class="t-leg r"></div><div class="mug"></div></div>
+  <div class="curtain-wrap"><div class="c-rod"></div><div class="c-ring"></div><div class="c-ring"></div><div class="c-ring"></div><div class="curtain"><div class="c-fold"></div><div class="c-fold"></div><div class="c-fold"></div></div></div>
+  <div class="shelf"><div class="sh-in"></div><div class="sh-in"></div><div class="sh-in"></div><div class="sh-bk" style="left:15%;top:30%;height:20%;background:#c4a888"></div><div class="sh-bk" style="left:42%;top:32%;height:18%;background:#98aab8"></div><div class="sh-bk" style="left:68%;top:30%;height:21%;background:#c8b898"></div><div class="sh-bk" style="left:15%;top:55%;height:18%;background:#b8a8a8"></div></div>
+  <div class="plant"><div class="p-lvs"></div><div class="p-pot"></div></div>
+
+  <!-- 点击区 -->
+  <div class="spot s1" data-spot="sofa"></div>
+  <div class="spot s2" data-spot="curtain"></div>
+  <div class="spot s3" data-spot="shelf"></div>
+  <div class="spot s4" data-spot="plant"></div>
+
+  <!-- 猫 -->
+  <div class="cat-area cat-sofa" id="c-sofa" style="bottom:24%;left:18%">
+    <div class="cat"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head"><div class="c-eye c-ey"><div class="c-pupil"></div></div><div class="c-eye c-ey2"><div class="c-pupil"></div></div><div class="c-nose"></div></div><div class="c-body"></div><div class="c-tail"></div></div>
+  </div>
+  <div class="cat-area cat-curtain" id="c-curtain" style="bottom:32%;right:6%">
+    <div class="cat" style="width:50px;height:40px"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head" style="bottom:8px;left:8px;width:28px;height:24px"><div class="c-eye c-ey" style="left:5px;top:5px;width:6px;height:7px"></div><div class="c-eye c-ey2" style="right:5px;top:5px;width:6px;height:7px"></div><div class="c-nose" style="top:12px;left:12.5px"></div></div></div>
+  </div>
+  <div class="cat-area cat-shelf" id="c-shelf" style="bottom:42%;left:2%">
+    <div class="cat" style="width:50px;height:40px"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head" style="bottom:8px;left:8px;width:28px;height:24px"><div class="c-eye c-ey" style="left:5px;top:5px;width:6px;height:7px"></div><div class="c-eye c-ey2" style="right:5px;top:5px;width:6px;height:7px"></div><div class="c-nose" style="top:12px;left:12.5px"></div></div></div>
+  </div>
+  <div class="cat-area cat-plant" id="c-plant" style="bottom:16%;right:0">
+    <div class="cat" style="width:50px;height:40px"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head" style="bottom:8px;left:8px;width:28px;height:24px"><div class="c-eye c-ey" style="left:5px;top:5px;width:6px;height:7px"></div><div class="c-eye c-ey2" style="right:5px;top:5px;width:6px;height:7px"></div><div class="c-nose" style="top:12px;left:12.5px"></div></div></div>
+  </div>
+
+  <!-- 提示 -->
+  <div class="hint" id="hint">猫猫躲在房间里，点你觉得她可能在的地方</div>
+
+  <!-- 找到 -->
+  <div class="found" id="found">
+    <div class="f-box">
+      <div class="big">🐱</div>
+      <h2>找到猫猫啦 💕</h2>
+      <div class="msg" id="fmsg"></div>
+      <button onclick="resetGame()">再找一次</button>
+    </div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+</div>
+
+<script>
+(function(){
+  var spots = ['sofa','curtain','shelf','plant'];
+  var target = spots[Math.floor(Math.random() * spots.length)];
+  var found = false;
+  var attempts = 0;
+
+  function peek(spot) {
+    var el = document.getElementById('c-'+spot);
+    if (!el) return;
+    el.classList.add('show');
+    var parts = el.querySelectorAll('.c-head, .c-body, .c-ear, .c-eye, .c-nose, .c-tail');
+    parts.forEach(function(p){ p.classList.remove('in'); });
+
+    // Sequential reveal using timeout chain
+    setTimeout(function(){
+      el.querySelectorAll('.c-ear').forEach(function(e){ e.classList.add('in'); });
+    }, 50);
+    setTimeout(function(){
+      var h = el.querySelector('.c-head');
+      if (h) h.classList.add('in');
+    }, 120);
+    setTimeout(function(){
+      el.querySelectorAll('.c-eye').forEach(function(e){ e.classList.add('in'); });
+      var n = el.querySelector('.c-nose');
+      if (n) n.classList.add('in');
+    }, 250);
+    setTimeout(function(){
+      var b = el.querySelector('.c-body');
+      if (b) b.classList.add('in');
+      var t = el.querySelector('.c-tail');
+      if (t) t.classList.add('in');
+    }, 400);
+  }
+
+  function hideAllCats() {
+    document.querySelectorAll('.cat-area').forEach(function(el){
+      el.classList.remove('show');
+      el.querySelectorAll('.c-head, .c-body, .c-ear, .c-eye, .c-nose, .c-tail').forEach(function(p){
+        p.classList.remove('in');
+      });
+    });
+  }
+
+  function getMsg(spot, n) {
+    var msgs = {
+      sofa: ['她从沙发底下探出半个脑袋，蓝眼睛望着你', '她一直躲在沙发下面，等你把手伸进来'],
+      curtain: ['她从窗帘后面露出半边脸，胡须一动一动的', '窗帘动了一下，她在那后面看你呢'],
+      shelf: ['她从书架上面探下头来，耳朵一动一动的', '这么高的地方她怎么上去的？她在看你'],
+      plant: ['她缩在花盆后面，像一团棉花糖', '她把自己藏在花盆旁边，以为你没看见']
+    };
+    var list = msgs[spot] || ['她被你找到了'];
+    return list[n % list.length];
+  }
+
+  function hearts() {
+    var layer = document.getElementById('hearts');
+    layer.classList.add('on');
+    layer.innerHTML = '';
+    var es = ['❤️','💕','💗','💖','✨','🌸'];
+    for (var i = 0; i < 20; i++) {
+      var h = document.createElement('div');
+      h.className = 'hrt';
+      h.textContent = es[Math.floor(Math.random() * es.length)];
+      h.style.left = (10 + Math.random() * 80) + '%';
+      h.style.top = (50 + Math.random() * 30) + '%';
+      h.style.animationDelay = (Math.random() * 1.5) + 's';
+      h.style.fontSize = (14 + Math.random() * 18) + 'px';
+      layer.appendChild(h);
+    }
+    setTimeout(function(){ layer.classList.remove('on'); }, 3000);
+  }
+
+  window.checkSpot = function(spot) {
+    if (found) return;
+    attempts++;
+
+    if (spot === target) {
+      found = true;
+      peek(spot);
+      document.getElementById('hint').classList.add('h');
+      setTimeout(function(){
+        document.getElementById('fmsg').textContent = getMsg(spot, attempts) + '——你找了' + attempts + '次';
+        document.getElementById('found').classList.add('show');
+        hearts();
+      }, 600);
+    } else {
+      var el = document.getElementById('c-'+spot);
+      if (el) {
+        el.classList.add('show');
+        el.style.opacity = '0.25';
+        setTimeout(function(){
+          el.classList.remove('show');
+          el.style.opacity = '1';
+        }, 350);
+      }
+      var h = document.getElementById('hint');
+      if (attempts <= 1) h.textContent = '不是那里哦，再找找别的角落';
+      else if (attempts === 2) h.textContent = '🧐 她喜欢暖和又安静的地方';
+      else if (attempts === 3) h.textContent = '🤫 注意那些能藏住猫的缝隙';
+      else h.textContent = '💡 ' + ['沙发底下看看','窗帘后面呢','书架顶上','花盆后面'][Math.floor(Math.random()*4)];
+    }
+  };
+
+  window.resetGame = function() {
+    found = false;
+    attempts = 0;
+    target = spots[Math.floor(Math.random() * spots.length)];
+    hideAllCats();
+    document.getElementById('found').classList.remove('show');
+    document.getElementById('hint').textContent = '猫猫又躲起来了，你觉得她会在哪';
+    document.getElementById('hint').classList.remove('h');
+    document.getElementById('hearts').classList.remove('on');
+  };
+
+  // Bind clicks
+  document.querySelectorAll('.spot').forEach(function(el){
+    el.addEventListener('click', function(){
+      checkSpot(this.dataset.spot);
+    });
+  });
+})();
+</script>
+</body>
+</html>
