@@ -1,287 +1,940 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>找猫猫</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#e8e0d6;display:grid;place-items:center;font-family:"PingFang SC","Microsoft YaHei",sans-serif;-webkit-user-select:none;user-select:none}
-.wrap{position:relative;width:min(94vw,400px);aspect-ratio:1/1;background:#ede4d8;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(60,40,20,.15),inset 0 0 0 1px rgba(255,255,255,.4)}
-.wall{position:absolute;inset:0;background:linear-gradient(175deg,#f7f0e7,#efe5d8 50%,#e6dac9)}
-.floor{position:absolute;bottom:0;left:0;right:0;height:38%;background:linear-gradient(0deg,#d6c8b4,#e0d2c0 50%,#e8dcc8)}
-.skirting{position:absolute;bottom:38%;left:0;right:0;height:5px;background:#c8b8a2}
-.picture{position:absolute;top:7%;left:50%;transform:translateX(-50%);width:20%;aspect-ratio:3/2;background:linear-gradient(135deg,#d4d0c8,#c8c0b4);border-radius:4px;border:5px solid #d8ccbc;display:grid;place-items:center;font-size:16px}
-.picture::after{content:"🌿"}
-.lamp{position:absolute;top:4%;right:12%;width:3px;height:24px;background:#b8a890;border-radius:2px}
-.lamp::after{content:"";position:absolute;top:-5px;left:-4px;width:11px;height:11px;background:linear-gradient(135deg,#f0e8c0,#e8d8a0);border-radius:50%;box-shadow:0 0 20px rgba(240,220,140,.15)}
-.sofa{position:absolute;bottom:15%;left:5%;width:44%;height:28%;background:linear-gradient(175deg,#c8b8a2,#baa890);border-radius:18px 18px 10px 10px}
-.sofa-b{position:absolute;top:-18%;left:0;width:100%;height:30%;background:linear-gradient(175deg,#d4c4b0,#c8b8a2);border-radius:14px 14px 4px 4px}
-.sofa-s{position:absolute;top:22%;left:6%;width:88%;height:28%;background:#baa890;border-radius:8px}
-.sofa-c{position:absolute;top:18%;left:10%;width:80%;height:18%;display:flex;gap:6%;justify-content:center}
-.sofa-c i{display:block;width:26%;height:100%;background:linear-gradient(175deg,#d8ccbc,#ccbeac);border-radius:8px}
-.sofa-l{position:absolute;bottom:-6%;width:7%;height:8%;background:#a0907a;border-radius:0 0 3px 3px}
-.sofa-l.l{left:14%}.sofa-l.r{right:14%}
-.table{position:absolute;bottom:25%;right:6%;width:32%;aspect-ratio:1/0.55;background:linear-gradient(175deg,#d0c0a8,#c4b49c);border-radius:6px}
-.t-leg{position:absolute;width:7%;height:16%;background:#a0907a;border-radius:2px}
-.t-leg.l{bottom:-14%;left:14%}.t-leg.r{bottom:-14%;right:14%}
-.mug{position:absolute;top:12%;right:20%;width:14%;aspect-ratio:1/1.1;background:linear-gradient(175deg,#e8e0d0,#dcd0c0);border-radius:50% 50% 4px 4px}
-.curtain-wrap{position:absolute;top:0;right:0;width:34%;height:70%;overflow:hidden}
-.curtain{position:absolute;top:0;right:0;width:100%;height:100%;background:linear-gradient(90deg,#e0d4c0,#d8cabc 30%,#c8bca8 70%,#d8cabc);border-radius:0 0 0 20px;opacity:.85}
-.c-fold{position:absolute;top:0;height:100%;width:16%;background:linear-gradient(90deg,transparent,rgba(0,0,0,.02),transparent)}
-.c-fold:nth-child(1){left:12%}.c-fold:nth-child(2){left:40%}.c-fold:nth-child(3){left:68%}
-.c-rod{position:absolute;top:-2px;right:0;width:36%;height:4px;background:linear-gradient(90deg,#b8a890,#c8bca8);border-radius:4px;z-index:2}
-.c-ring{position:absolute;top:-4px;width:7px;height:7px;border-radius:50%;border:2px solid #c8bca8;z-index:3}
-.c-ring:nth-child(1){right:6%}.c-ring:nth-child(2){right:20%}.c-ring:nth-child(3){right:34%}
-.shelf{position:absolute;top:9%;left:4%;width:17%;height:46%;background:linear-gradient(175deg,#c8b8a2,#baa890);border-radius:4px}
-.sh-in{position:absolute;left:8%;right:8%;height:2px;background:#d4c4b0;border-radius:2px}
-.sh-in:nth-child(1){top:28%}.sh-in:nth-child(2){top:52%}.sh-in:nth-child(3){top:76%}
-.sh-bk{position:absolute;width:18%;height:18%;border-radius:2px}
-.plant{position:absolute;bottom:16%;right:2%;width:15%;aspect-ratio:1/1.3;z-index:5}
-.p-pot{position:absolute;bottom:0;left:5%;width:90%;height:48%;background:linear-gradient(175deg,#d4a078,#c89068);border-radius:0 0 6px 6px}
-.p-pot::after{content:"";position:absolute;top:-3px;left:8%;width:84%;height:5px;background:#dcac84;border-radius:2px}
-.p-lvs{position:absolute;bottom:38%;left:-8%;width:116%;height:55%;background:radial-gradient(ellipse at 50% 100%,#8aaa7a,transparent);opacity:.3;border-radius:50%}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Find the Cat</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #24313d;
+      --muted: #61717f;
+      --paper: #fffdf7;
+      --line: #dde4ea;
+      --accent: #e95858;
+      --accent-dark: #c83d3d;
+      --leaf: #2f9d75;
+      --sky: #68a8d7;
+      --sun: #f2b84b;
+      --shadow: 0 18px 50px rgba(36, 49, 61, .14);
+    }
 
-/* 点击区 */
-.spot{position:absolute;z-index:8;cursor:pointer;border-radius:12px}
-.spot:active{transform:scale(.96)}
-.s1{width:26%;height:14%;bottom:18%;left:14%}
-.s2{width:20%;height:34%;top:16%;right:4%}
-.s3{width:11%;height:16%;top:14%;left:7%}
-.s4{width:13%;height:22%;bottom:14%;right:0;z-index:9}
+    * {
+      box-sizing: border-box;
+    }
 
-/* 猫 */
-.cat-area{position:absolute;z-index:10;display:none;pointer-events:none}
-.cat-area.show{display:block}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 16%, rgba(104, 168, 215, .24), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(242, 184, 75, .26), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #fff8e8 100%);
+      overflow-x: hidden;
+    }
 
-.cat{position:relative;width:70px;height:60px}
-.c-body{position:absolute;bottom:0;left:15%;width:48px;height:38px;background:linear-gradient(175deg,#f5efe8,#e8ddd0);border-radius:50% 50% 40% 40%;opacity:0;transition:opacity .5s}
-.c-body.in{opacity:1}
+    button {
+      font: inherit;
+    }
 
-.c-head{position:absolute;bottom:22px;left:18px;width:34px;height:30px;background:linear-gradient(175deg,#f5efe8,#e8ddd0);border-radius:50%;opacity:0;transition:opacity .3s;z-index:2}
-.c-head.in{opacity:1}
+    .app {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 24px 0 32px;
+    }
 
-.c-ear{position:absolute;width:0;height:0;border-style:solid;border-width:0 7px 12px 7px;border-color:transparent transparent #d4b8a0 transparent;opacity:0;transition:opacity .3s}
-.c-ear.in{opacity:1}
-.c-el{top:-6px;left:4px}
-.c-er{top:-6px;right:4px}
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
 
-.c-eye{position:absolute;width:7px;height:8px;background:linear-gradient(175deg,#7ab8d8,#5a98c0);border-radius:50%;opacity:0;transition:opacity .3s;z-index:5}
-.c-eye.in{opacity:1}
-.c-ey{left:7px;top:7px}.c-ey2{right:7px;top:7px}
-.c-pupil{position:absolute;width:3px;height:4px;background:#2a3a4a;border-radius:50%;top:2px;left:2px}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
 
-.c-nose{position:absolute;width:3px;height:2.5px;background:#e8b0a8;border-radius:50%;top:16px;left:15.5px;opacity:0;transition:opacity .3s;z-index:5}
-.c-nose.in{opacity:1}
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 2px solid rgba(36, 49, 61, .12);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(36, 49, 61, .08);
+      font-size: 28px;
+    }
 
-.c-tail{position:absolute;bottom:-6px;left:-12px;width:24px;height:6px;background:#e8ddd0;border-radius:3px;opacity:0;transition:opacity .5s}
-.c-tail.in{opacity:1}
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 52px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
 
-/* 各位置偏移 */
-.cat-curtain .c-head{background:#f0e8e0}
-.cat-curtain .c-body{display:none}
-.cat-shelf{transform:scale(.8);transform-origin:left top}
-.cat-shelf .c-head{background:#f0e8e0;width:30px;height:26px}
-.cat-shelf .c-body{display:none}
-.cat-plant{transform:scale(.75);transform-origin:left bottom}
-.cat-plant .c-head{background:#f0e8e0}
-.cat-plant .c-body{display:none}
+    .tagline {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-/* 提示 */
-.hint{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);padding:6px 16px;border-radius:20px;font-size:11px;color:#8a7a6a;z-index:15;white-space:nowrap;transition:opacity .5s;pointer-events:none}
-.hint.h{opacity:0}
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
 
-/* 找到 */
-.found{position:absolute;inset:0;z-index:30;display:none;place-items:center;background:rgba(232,224,212,.88);backdrop-filter:blur(8px)}
-.found.show{display:grid;animation:fi .5s}
-@keyframes fi{from{opacity:0}to{opacity:1}}
-.f-box{text-align:center;padding:10px 20px}
-.f-box .big{font-size:52px;margin-bottom:8px;animation:bo .6s}
-@keyframes bo{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(-6px)}}
-.f-box h2{font-size:20px;color:#5a4a3a;font-weight:700}
-.f-box .msg{font-size:12px;color:#9a8a7a;line-height:1.6;margin:6px 0 14px}
-.f-box button{background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.08);color:#5a4a3a;padding:8px 22px;border-radius:12px;font-size:13px;cursor:pointer;transition:.2s}
-.f-box button:active{background:#fff}
+    .btn {
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid rgba(36, 49, 61, .12);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(36, 49, 61, .08);
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
 
-/* 爱心 */
-.hearts{position:absolute;inset:0;z-index:35;pointer-events:none;display:none}
-.hearts.on{display:block}
-.hrt{position:absolute;animation:up 2.5s ease forwards;font-size:16px}
-@keyframes up{0%{opacity:1;transform:translateY(0) scale(.8)}100%{opacity:0;transform:translateY(-200px) scale(1.2)}}
-</style>
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(36, 49, 61, .12);
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn.primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .scene-wrap,
+    .panel {
+      border: 1px solid rgba(36, 49, 61, .11);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .scene-wrap {
+      overflow: hidden;
+    }
+
+    .hud {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .74);
+    }
+
+    .stat {
+      min-width: 0;
+      padding: 14px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .stat:last-child {
+      border-right: 0;
+    }
+
+    .label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .value {
+      display: block;
+      margin-top: 4px;
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .scene {
+      position: relative;
+      height: min(68vh, 650px);
+      min-height: 430px;
+      overflow: hidden;
+      background:
+        linear-gradient(#9ed4f0 0 50%, transparent 50%),
+        linear-gradient(180deg, #8bcf78 0%, #5ead65 100%);
+      cursor: crosshair;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .cloud,
+    .tree,
+    .bush,
+    .rock,
+    .box,
+    .flower,
+    .butterfly,
+    .cat {
+      position: absolute;
+    }
+
+    .cloud {
+      width: var(--w);
+      height: calc(var(--w) * .34);
+      left: var(--x);
+      top: var(--y);
+      opacity: .8;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .9);
+      box-shadow:
+        calc(var(--w) * .18) calc(var(--w) * -.12) 0 calc(var(--w) * .03) rgba(255,255,255,.9),
+        calc(var(--w) * .4) calc(var(--w) * .02) 0 calc(var(--w) * .04) rgba(255,255,255,.88);
+      animation: drift var(--s) linear infinite;
+    }
+
+    @keyframes drift {
+      from { transform: translateX(-16px); }
+      to { transform: translateX(18px); }
+    }
+
+    .sun {
+      position: absolute;
+      right: 8%;
+      top: 8%;
+      width: 74px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--sun);
+      box-shadow: 0 0 0 16px rgba(242, 184, 75, .18);
+    }
+
+    .tree {
+      left: var(--x);
+      bottom: var(--b);
+      width: var(--w);
+      height: calc(var(--w) * 1.65);
+    }
+
+    .tree::before {
+      content: "";
+      position: absolute;
+      left: 42%;
+      bottom: 0;
+      width: 18%;
+      height: 56%;
+      border-radius: 999px 999px 3px 3px;
+      background: #8a5a34;
+    }
+
+    .tree::after {
+      content: "";
+      position: absolute;
+      left: 6%;
+      top: 0;
+      width: 88%;
+      aspect-ratio: 1;
+      border-radius: 48% 52% 45% 55%;
+      background: #2f9d75;
+      box-shadow:
+        calc(var(--w) * -.12) calc(var(--w) * .2) 0 #247c5d,
+        calc(var(--w) * .14) calc(var(--w) * .22) 0 #3dae7d;
+    }
+
+    .bush {
+      left: var(--x);
+      bottom: var(--b);
+      width: var(--w);
+      height: calc(var(--w) * .46);
+      border-radius: 999px 999px 8px 8px;
+      background: #347e57;
+      box-shadow:
+        calc(var(--w) * .22) calc(var(--w) * -.1) 0 calc(var(--w) * .04) #3f9969,
+        calc(var(--w) * .48) calc(var(--w) * -.04) 0 #2f704f;
+    }
+
+    .rock {
+      left: var(--x);
+      bottom: var(--b);
+      width: var(--w);
+      height: calc(var(--w) * .52);
+      border-radius: 50% 50% 12% 18%;
+      background: #8a949b;
+      box-shadow: inset -12px -8px 0 rgba(36, 49, 61, .12);
+    }
+
+    .box {
+      left: var(--x);
+      bottom: var(--b);
+      width: var(--w);
+      height: calc(var(--w) * .8);
+      border-radius: 5px;
+      background: #c88744;
+      box-shadow: inset 0 10px 0 rgba(255,255,255,.12), inset -12px -8px 0 rgba(36,49,61,.1);
+    }
+
+    .box::before {
+      content: "";
+      position: absolute;
+      inset: 12% 0 auto;
+      height: 3px;
+      background: rgba(36, 49, 61, .18);
+    }
+
+    .flower {
+      left: var(--x);
+      bottom: var(--b);
+      width: 18px;
+      height: 36px;
+    }
+
+    .flower::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      bottom: 0;
+      width: 3px;
+      height: 24px;
+      background: #2f9d75;
+    }
+
+    .flower::after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 0;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow:
+        -6px 3px 0 #f39b56,
+        6px 3px 0 #f39b56,
+        0 7px 0 #e95858;
+    }
+
+    .butterfly {
+      left: var(--x);
+      top: var(--y);
+      width: 20px;
+      height: 16px;
+      animation: flutter 2.4s ease-in-out infinite;
+    }
+
+    .butterfly::before,
+    .butterfly::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      width: 10px;
+      height: 12px;
+      border-radius: 10px 10px 5px 10px;
+      background: #7054c6;
+    }
+
+    .butterfly::before {
+      left: 0;
+      transform: rotate(-24deg);
+    }
+
+    .butterfly::after {
+      right: 0;
+      transform: rotate(24deg);
+    }
+
+    @keyframes flutter {
+      50% { transform: translateY(-12px); }
+    }
+
+    .cat {
+      left: var(--cat-x);
+      top: var(--cat-y);
+      width: var(--cat-size);
+      height: var(--cat-size);
+      transform: translate(-50%, -50%) scale(var(--cat-scale, 1));
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      z-index: 6;
+      transition: filter .2s ease, transform .2s ease;
+    }
+
+    .cat:hover {
+      filter: drop-shadow(0 8px 10px rgba(36, 49, 61, .18));
+      transform: translate(-50%, -50%) scale(calc(var(--cat-scale, 1) * 1.05));
+    }
+
+    .cat-body {
+      position: absolute;
+      left: 13%;
+      top: 24%;
+      width: 74%;
+      height: 68%;
+      border-radius: 45% 45% 38% 38%;
+      background: #f9b35f;
+      box-shadow: inset -8px -7px 0 rgba(147, 82, 35, .18);
+    }
+
+    .cat-body::before,
+    .cat-body::after {
+      content: "";
+      position: absolute;
+      top: -17%;
+      width: 28%;
+      height: 28%;
+      background: #f9b35f;
+      clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    }
+
+    .cat-body::before {
+      left: 10%;
+      transform: rotate(-12deg);
+    }
+
+    .cat-body::after {
+      right: 10%;
+      transform: rotate(12deg);
+    }
+
+    .cat-face {
+      position: absolute;
+      inset: 34% 22% 24%;
+    }
+
+    .cat-face::before,
+    .cat-face::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2f2520;
+    }
+
+    .cat-face::before { left: 12%; }
+    .cat-face::after { right: 12%; }
+
+    .nose {
+      position: absolute;
+      left: 50%;
+      top: 38%;
+      width: 8px;
+      height: 6px;
+      border-radius: 50%;
+      background: #cf5b62;
+      transform: translateX(-50%);
+    }
+
+    .tail {
+      position: absolute;
+      right: 1%;
+      top: 46%;
+      width: 30%;
+      height: 16%;
+      border: 8px solid #f9b35f;
+      border-left: 0;
+      border-bottom: 0;
+      border-radius: 0 999px 0 0;
+      transform: rotate(28deg);
+      transform-origin: left bottom;
+    }
+
+    .hidden .cat {
+      --cat-scale: .56;
+    }
+
+    .found .cat {
+      animation: celebrate .72s ease-in-out infinite alternate;
+    }
+
+    @keyframes celebrate {
+      to { transform: translate(-50%, -55%) rotate(-5deg) scale(1.1); }
+    }
+
+    .ripple {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(233, 88, 88, .75);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: ping .55s ease-out forwards;
+      z-index: 10;
+    }
+
+    @keyframes ping {
+      to {
+        width: 94px;
+        height: 94px;
+        opacity: 0;
+      }
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .level {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .level.active {
+      border-color: var(--accent);
+      background: #fff0ee;
+      color: var(--accent-dark);
+      font-weight: 800;
+    }
+
+    .message {
+      min-height: 84px;
+      padding: 14px;
+      border: 1px dashed #cfd9e2;
+      border-radius: 8px;
+      background: #fbfdff;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .records {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .record {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .record strong {
+      color: var(--leaf);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      max-width: min(420px, calc(100% - 28px));
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: rgba(36, 49, 61, .94);
+      color: white;
+      box-shadow: 0 18px 40px rgba(36, 49, 61, .18);
+      transform: translate(-50%, 24px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 880px) {
+      .topbar,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .actions .btn {
+        flex: 1;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .panel {
+        margin-top: 14px;
+      }
+
+      .scene {
+        height: 58vh;
+        min-height: 380px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        width: min(100% - 18px, 1120px);
+        padding-top: 14px;
+      }
+
+      .hud {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat:nth-child(2) {
+        border-right: 0;
+      }
+
+      .stat:nth-child(-n + 2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .scene {
+        min-height: 340px;
+      }
+
+      .value {
+        font-size: 19px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">🐱</div>
+        <div>
+          <h1>Find the Cat</h1>
+          <p class="tagline">在小院里找到藏起来的猫。越难，猫越小，也藏得越深。</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="newGame">新一局</button>
+        <button class="btn" id="hint">提示</button>
+      </div>
+    </header>
 
-<div class="wrap" id="wrap">
-  <div class="wall"></div>
-  <div class="floor"></div>
-  <div class="skirting"></div>
-  <div class="picture"></div>
-  <div class="lamp"></div>
-  <div class="sofa"><div class="sofa-b"></div><div class="sofa-s"></div><div class="sofa-c"><i></i><i></i><i></i></div><div class="sofa-l l"></div><div class="sofa-l r"></div></div>
-  <div class="table"><div class="t-leg l"></div><div class="t-leg r"></div><div class="mug"></div></div>
-  <div class="curtain-wrap"><div class="c-rod"></div><div class="c-ring"></div><div class="c-ring"></div><div class="c-ring"></div><div class="curtain"><div class="c-fold"></div><div class="c-fold"></div><div class="c-fold"></div></div></div>
-  <div class="shelf"><div class="sh-in"></div><div class="sh-in"></div><div class="sh-in"></div><div class="sh-bk" style="left:15%;top:30%;height:20%;background:#c4a888"></div><div class="sh-bk" style="left:42%;top:32%;height:18%;background:#98aab8"></div><div class="sh-bk" style="left:68%;top:30%;height:21%;background:#c8b898"></div><div class="sh-bk" style="left:15%;top:55%;height:18%;background:#b8a8a8"></div></div>
-  <div class="plant"><div class="p-lvs"></div><div class="p-pot"></div></div>
+    <section class="layout">
+      <div class="scene-wrap">
+        <div class="hud" aria-label="游戏信息">
+          <div class="stat">
+            <span class="label">难度</span>
+            <span class="value" id="levelName">普通</span>
+          </div>
+          <div class="stat">
+            <span class="label">用时</span>
+            <span class="value" id="time">0s</span>
+          </div>
+          <div class="stat">
+            <span class="label">点击</span>
+            <span class="value" id="clicks">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">最佳</span>
+            <span class="value" id="best">--</span>
+          </div>
+        </div>
+        <div class="scene hidden" id="scene" aria-label="找猫游戏区域"></div>
+      </div>
 
-  <!-- 点击区 -->
-  <div class="spot s1" data-spot="sofa"></div>
-  <div class="spot s2" data-spot="curtain"></div>
-  <div class="spot s3" data-spot="shelf"></div>
-  <div class="spot s4" data-spot="plant"></div>
+      <aside class="panel">
+        <h2>难度</h2>
+        <div class="levels" id="levels">
+          <button class="level" data-level="easy">简单</button>
+          <button class="level active" data-level="normal">普通</button>
+          <button class="level" data-level="hard">困难</button>
+        </div>
+        <div class="message" id="message">猫已经藏好了。点画面里的地方来找它，点错也会记录次数。</div>
+        <div class="records" aria-label="最佳记录">
+          <div class="record"><span>简单</span><strong id="recordEasy">--</strong></div>
+          <div class="record"><span>普通</span><strong id="recordNormal">--</strong></div>
+          <div class="record"><span>困难</span><strong id="recordHard">--</strong></div>
+        </div>
+      </aside>
+    </section>
+  </main>
 
-  <!-- 猫 -->
-  <div class="cat-area cat-sofa" id="c-sofa" style="bottom:24%;left:18%">
-    <div class="cat"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head"><div class="c-eye c-ey"><div class="c-pupil"></div></div><div class="c-eye c-ey2"><div class="c-pupil"></div></div><div class="c-nose"></div></div><div class="c-body"></div><div class="c-tail"></div></div>
-  </div>
-  <div class="cat-area cat-curtain" id="c-curtain" style="bottom:32%;right:6%">
-    <div class="cat" style="width:50px;height:40px"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head" style="bottom:8px;left:8px;width:28px;height:24px"><div class="c-eye c-ey" style="left:5px;top:5px;width:6px;height:7px"></div><div class="c-eye c-ey2" style="right:5px;top:5px;width:6px;height:7px"></div><div class="c-nose" style="top:12px;left:12.5px"></div></div></div>
-  </div>
-  <div class="cat-area cat-shelf" id="c-shelf" style="bottom:42%;left:2%">
-    <div class="cat" style="width:50px;height:40px"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head" style="bottom:8px;left:8px;width:28px;height:24px"><div class="c-eye c-ey" style="left:5px;top:5px;width:6px;height:7px"></div><div class="c-eye c-ey2" style="right:5px;top:5px;width:6px;height:7px"></div><div class="c-nose" style="top:12px;left:12.5px"></div></div></div>
-  </div>
-  <div class="cat-area cat-plant" id="c-plant" style="bottom:16%;right:0">
-    <div class="cat" style="width:50px;height:40px"><div class="c-el c-ear"></div><div class="c-er c-ear"></div><div class="c-head" style="bottom:8px;left:8px;width:28px;height:24px"><div class="c-eye c-ey" style="left:5px;top:5px;width:6px;height:7px"></div><div class="c-eye c-ey2" style="right:5px;top:5px;width:6px;height:7px"></div><div class="c-nose" style="top:12px;left:12.5px"></div></div></div>
-  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- 提示 -->
-  <div class="hint" id="hint">猫猫躲在房间里，点你觉得她可能在的地方</div>
+  <script>
+    const scene = document.querySelector("#scene");
+    const timeEl = document.querySelector("#time");
+    const clicksEl = document.querySelector("#clicks");
+    const bestEl = document.querySelector("#best");
+    const messageEl = document.querySelector("#message");
+    const toastEl = document.querySelector("#toast");
+    const levelNameEl = document.querySelector("#levelName");
 
-  <!-- 找到 -->
-  <div class="found" id="found">
-    <div class="f-box">
-      <div class="big">🐱</div>
-      <h2>找到猫猫啦 💕</h2>
-      <div class="msg" id="fmsg"></div>
-      <button onclick="resetGame()">再找一次</button>
-    </div>
-  </div>
-
-  <div class="hearts" id="hearts"></div>
-</div>
-
-<script>
-(function(){
-  var spots = ['sofa','curtain','shelf','plant'];
-  var target = spots[Math.floor(Math.random() * spots.length)];
-  var found = false;
-  var attempts = 0;
-
-  function peek(spot) {
-    var el = document.getElementById('c-'+spot);
-    if (!el) return;
-    el.classList.add('show');
-    var parts = el.querySelectorAll('.c-head, .c-body, .c-ear, .c-eye, .c-nose, .c-tail');
-    parts.forEach(function(p){ p.classList.remove('in'); });
-
-    // Sequential reveal using timeout chain
-    setTimeout(function(){
-      el.querySelectorAll('.c-ear').forEach(function(e){ e.classList.add('in'); });
-    }, 50);
-    setTimeout(function(){
-      var h = el.querySelector('.c-head');
-      if (h) h.classList.add('in');
-    }, 120);
-    setTimeout(function(){
-      el.querySelectorAll('.c-eye').forEach(function(e){ e.classList.add('in'); });
-      var n = el.querySelector('.c-nose');
-      if (n) n.classList.add('in');
-    }, 250);
-    setTimeout(function(){
-      var b = el.querySelector('.c-body');
-      if (b) b.classList.add('in');
-      var t = el.querySelector('.c-tail');
-      if (t) t.classList.add('in');
-    }, 400);
-  }
-
-  function hideAllCats() {
-    document.querySelectorAll('.cat-area').forEach(function(el){
-      el.classList.remove('show');
-      el.querySelectorAll('.c-head, .c-body, .c-ear, .c-eye, .c-nose, .c-tail').forEach(function(p){
-        p.classList.remove('in');
-      });
-    });
-  }
-
-  function getMsg(spot, n) {
-    var msgs = {
-      sofa: ['她从沙发底下探出半个脑袋，蓝眼睛望着你', '她一直躲在沙发下面，等你把手伸进来'],
-      curtain: ['她从窗帘后面露出半边脸，胡须一动一动的', '窗帘动了一下，她在那后面看你呢'],
-      shelf: ['她从书架上面探下头来，耳朵一动一动的', '这么高的地方她怎么上去的？她在看你'],
-      plant: ['她缩在花盆后面，像一团棉花糖', '她把自己藏在花盆旁边，以为你没看见']
+    const records = {
+      easy: document.querySelector("#recordEasy"),
+      normal: document.querySelector("#recordNormal"),
+      hard: document.querySelector("#recordHard")
     };
-    var list = msgs[spot] || ['她被你找到了'];
-    return list[n % list.length];
-  }
 
-  function hearts() {
-    var layer = document.getElementById('hearts');
-    layer.classList.add('on');
-    layer.innerHTML = '';
-    var es = ['❤️','💕','💗','💖','✨','🌸'];
-    for (var i = 0; i < 20; i++) {
-      var h = document.createElement('div');
-      h.className = 'hrt';
-      h.textContent = es[Math.floor(Math.random() * es.length)];
-      h.style.left = (10 + Math.random() * 80) + '%';
-      h.style.top = (50 + Math.random() * 30) + '%';
-      h.style.animationDelay = (Math.random() * 1.5) + 's';
-      h.style.fontSize = (14 + Math.random() * 18) + 'px';
-      layer.appendChild(h);
+    const levels = {
+      easy: { name: "简单", size: 74, clutter: 18, hint: 140 },
+      normal: { name: "普通", size: 58, clutter: 28, hint: 105 },
+      hard: { name: "困难", size: 42, clutter: 42, hint: 76 }
+    };
+
+    let currentLevel = "normal";
+    let cat = { x: 50, y: 50 };
+    let clicks = 0;
+    let startedAt = 0;
+    let timer = null;
+    let found = false;
+
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
     }
-    setTimeout(function(){ layer.classList.remove('on'); }, 3000);
-  }
 
-  window.checkSpot = function(spot) {
-    if (found) return;
-    attempts++;
+    function pick(items) {
+      return items[Math.floor(Math.random() * items.length)];
+    }
 
-    if (spot === target) {
-      found = true;
-      peek(spot);
-      document.getElementById('hint').classList.add('h');
-      setTimeout(function(){
-        document.getElementById('fmsg').textContent = getMsg(spot, attempts) + '——你找了' + attempts + '次';
-        document.getElementById('found').classList.add('show');
-        hearts();
-      }, 600);
-    } else {
-      var el = document.getElementById('c-'+spot);
-      if (el) {
-        el.classList.add('show');
-        el.style.opacity = '0.25';
-        setTimeout(function(){
-          el.classList.remove('show');
-          el.style.opacity = '1';
-        }, 350);
+    function setStyle(el, values) {
+      Object.entries(values).forEach(([key, value]) => el.style.setProperty(key, value));
+    }
+
+    function formatScore(seconds, count) {
+      return `${seconds}s / ${count}次`;
+    }
+
+    function getBest(level) {
+      const raw = localStorage.getItem(`find-cat:${level}`);
+      return raw ? JSON.parse(raw) : null;
+    }
+
+    function setBest(level, score) {
+      const previous = getBest(level);
+      if (!previous || score.seconds < previous.seconds || (score.seconds === previous.seconds && score.clicks < previous.clicks)) {
+        localStorage.setItem(`find-cat:${level}`, JSON.stringify(score));
+        return true;
       }
-      var h = document.getElementById('hint');
-      if (attempts <= 1) h.textContent = '不是那里哦，再找找别的角落';
-      else if (attempts === 2) h.textContent = '🧐 她喜欢暖和又安静的地方';
-      else if (attempts === 3) h.textContent = '🤫 注意那些能藏住猫的缝隙';
-      else h.textContent = '💡 ' + ['沙发底下看看','窗帘后面呢','书架顶上','花盆后面'][Math.floor(Math.random()*4)];
+      return false;
     }
-  };
 
-  window.resetGame = function() {
-    found = false;
-    attempts = 0;
-    target = spots[Math.floor(Math.random() * spots.length)];
-    hideAllCats();
-    document.getElementById('found').classList.remove('show');
-    document.getElementById('hint').textContent = '猫猫又躲起来了，你觉得她会在哪';
-    document.getElementById('hint').classList.remove('h');
-    document.getElementById('hearts').classList.remove('on');
-  };
+    function refreshRecords() {
+      Object.keys(records).forEach((level) => {
+        const best = getBest(level);
+        records[level].textContent = best ? formatScore(best.seconds, best.clicks) : "--";
+      });
 
-  // Bind clicks
-  document.querySelectorAll('.spot').forEach(function(el){
-    el.addEventListener('click', function(){
-      checkSpot(this.dataset.spot);
+      const currentBest = getBest(currentLevel);
+      bestEl.textContent = currentBest ? `${currentBest.seconds}s` : "--";
+    }
+
+    function showToast(text) {
+      toastEl.textContent = text;
+      toastEl.classList.add("show");
+      window.clearTimeout(showToast.hideTimer);
+      showToast.hideTimer = window.setTimeout(() => toastEl.classList.remove("show"), 1800);
+    }
+
+    function addDecor() {
+      scene.innerHTML = '<div class="sun"></div>';
+
+      for (let i = 0; i < 4; i++) {
+        const cloud = document.createElement("div");
+        cloud.className = "cloud";
+        setStyle(cloud, {
+          "--x": `${rand(-4, 78)}%`,
+          "--y": `${rand(7, 32)}%`,
+          "--w": `${rand(70, 150)}px`,
+          "--s": `${rand(5, 9)}s`
+        });
+        scene.append(cloud);
+      }
+
+      const config = levels[currentLevel];
+      const types = ["tree", "bush", "rock", "box", "flower", "butterfly"];
+      for (let i = 0; i < config.clutter; i++) {
+        const type = pick(types);
+        const el = document.createElement("div");
+        el.className = type;
+
+        if (type === "tree") {
+          setStyle(el, { "--x": `${rand(0, 88)}%`, "--b": `${rand(3, 28)}%`, "--w": `${rand(54, 112)}px` });
+        } else if (type === "bush") {
+          setStyle(el, { "--x": `${rand(0, 86)}%`, "--b": `${rand(3, 32)}%`, "--w": `${rand(70, 150)}px` });
+        } else if (type === "rock") {
+          setStyle(el, { "--x": `${rand(2, 90)}%`, "--b": `${rand(2, 24)}%`, "--w": `${rand(38, 92)}px` });
+        } else if (type === "box") {
+          setStyle(el, { "--x": `${rand(4, 88)}%`, "--b": `${rand(2, 22)}%`, "--w": `${rand(44, 82)}px` });
+        } else if (type === "flower") {
+          setStyle(el, { "--x": `${rand(2, 96)}%`, "--b": `${rand(1, 26)}%` });
+        } else {
+          setStyle(el, { "--x": `${rand(4, 92)}%`, "--y": `${rand(22, 55)}%` });
+        }
+
+        scene.append(el);
+      }
+    }
+
+    function addCat() {
+      cat.x = rand(8, 92);
+      cat.y = rand(49, 88);
+
+      const button = document.createElement("button");
+      button.className = "cat";
+      button.type = "button";
+      button.setAttribute("aria-label", "猫在这里");
+      setStyle(button, {
+        "--cat-x": `${cat.x}%`,
+        "--cat-y": `${cat.y}%`,
+        "--cat-size": `${levels[currentLevel].size}px`
+      });
+      button.innerHTML = `
+        <span class="tail" aria-hidden="true"></span>
+        <span class="cat-body" aria-hidden="true">
+          <span class="cat-face"><span class="nose"></span></span>
+        </span>
+      `;
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        win();
+      });
+      scene.append(button);
+    }
+
+    function startTimer() {
+      window.clearInterval(timer);
+      startedAt = Date.now();
+      timer = window.setInterval(() => {
+        timeEl.textContent = `${Math.floor((Date.now() - startedAt) / 1000)}s`;
+      }, 250);
+    }
+
+    function startGame() {
+      const config = levels[currentLevel];
+      found = false;
+      clicks = 0;
+      clicksEl.textContent = "0";
+      timeEl.textContent = "0s";
+      levelNameEl.textContent = config.name;
+      messageEl.textContent = "猫已经藏好了。点画面里的地方来找它，点错也会记录次数。";
+      scene.classList.remove("found");
+      scene.classList.add("hidden");
+      addDecor();
+      addCat();
+      startTimer();
+      refreshRecords();
+    }
+
+    function win() {
+      if (found) return;
+      found = true;
+      clicks += 1;
+      clicksEl.textContent = clicks;
+      window.clearInterval(timer);
+      scene.classList.remove("hidden");
+      scene.classList.add("found");
+
+      const seconds = Math.max(1, Math.floor((Date.now() - startedAt) / 1000));
+      const isBest = setBest(currentLevel, { seconds, clicks });
+      refreshRecords();
+      messageEl.textContent = isBest
+        ? `找到了！${seconds}秒，${clicks}次点击，新纪录。`
+        : `找到了！${seconds}秒，${clicks}次点击。`;
+      showToast(isBest ? "新纪录！" : "找到猫了！");
+    }
+
+    function markClick(event) {
+      if (found) return;
+      clicks += 1;
+      clicksEl.textContent = clicks;
+
+      const rect = scene.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      scene.append(ripple);
+      ripple.addEventListener("animationend", () => ripple.remove());
+
+      const dx = ((x / rect.width) * 100) - cat.x;
+      const dy = ((y / rect.height) * 100) - cat.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance < 8) {
+        messageEl.textContent = "很近了，再仔细看这附近。";
+      } else if (distance < 18) {
+        messageEl.textContent = "方向不错，猫就在周围。";
+      } else {
+        messageEl.textContent = "这里没有猫，换个地方看看。";
+      }
+    }
+
+    function hint() {
+      if (found) {
+        showToast("已经找到啦，开新一局继续玩。");
+        return;
+      }
+
+      const ring = document.createElement("span");
+      ring.className = "ripple";
+      ring.style.left = `${cat.x}%`;
+      ring.style.top = `${cat.y}%`;
+      ring.style.width = `${levels[currentLevel].hint}px`;
+      ring.style.height = `${levels[currentLevel].hint}px`;
+      scene.append(ring);
+      ring.addEventListener("animationend", () => ring.remove());
+      messageEl.textContent = "提示圈出现过的位置附近，藏着一只很淡定的猫。";
+    }
+
+    document.querySelector("#newGame").addEventListener("click", startGame);
+    document.querySelector("#hint").addEventListener("click", hint);
+    scene.addEventListener("click", markClick);
+
+    document.querySelector("#levels").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-level]");
+      if (!button) return;
+      currentLevel = button.dataset.level;
+      document.querySelectorAll(".level").forEach((item) => item.classList.toggle("active", item === button));
+      startGame();
     });
-  });
-})();
-</script>
+
+    refreshRecords();
+    startGame();
+  </script>
 </body>
 </html>
